@@ -52,10 +52,12 @@ module Servant.API.UVerb.Union
 ( IsMember
 , Unique
 , Union
+, Contains
 , inject
 , eject
 , foldMapUnion
 , matchUnion
+, relaxUnion
 )
 where
 
@@ -92,6 +94,10 @@ matchUnion :: forall (a :: *) (as :: [*]). (IsMember a as) => Union as -> Maybe 
 matchUnion = fmap unI . eject
 
 -- * Stuff stolen from 'Data.WorldPeace" but for generics-sop
+
+relaxUnion :: Contains as bs => Union as -> Union bs
+relaxUnion (Z x) = inject x
+relaxUnion (S r) = relaxUnion r
 
 -- (this could to go sop-core, except it's probably too specialized to the servant use-case.)
 
@@ -145,3 +151,9 @@ _testNubbed :: ( ( Nubbed '[Bool, Int, Int] ~ 'False
                  )
                => a) -> a
 _testNubbed = id
+
+-- | Check whether @as@ is a subset of @bs@.
+type family Contains (as :: [k]) (bs :: [k]) :: Constraint where
+  Contains (a ': as') bs =
+    (IsMember a bs, Contains as' bs)
+  Contains '[] _ = ()
