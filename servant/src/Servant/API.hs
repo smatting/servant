@@ -127,7 +127,7 @@ import           Servant.API.Sub
                  ((:>))
 import           Servant.API.UVerb
                  (HasStatus, IsMember, StatusOf, Statuses, UVerb, Union, UElem,
-                 Unique, Contains, WithStatus (..), inject, relaxUnion, statusOf)
+                 Unique, SubsetOf, WithStatus (..), inject, injectUnion, relaxUnion, statusOf)
 import           Servant.API.Vault
                  (Vault)
 import           Servant.API.Verbs

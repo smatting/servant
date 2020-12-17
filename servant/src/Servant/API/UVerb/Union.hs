@@ -52,9 +52,10 @@ module Servant.API.UVerb.Union
 ( IsMember
 , Unique
 , Union
-, Contains
+, SubsetOf
 , UElem
 , inject
+, injectUnion
 , eject
 , foldMapUnion
 , matchUnion
@@ -63,7 +64,7 @@ module Servant.API.UVerb.Union
 where
 
 import Data.Proxy (Proxy)
-import Data.SOP.BasicFunctors (I, unI)
+import Data.SOP.BasicFunctors (I(..), unI)
 import Data.SOP.Constraint
 import Data.SOP.NS
 import Data.Type.Bool (If)
@@ -94,9 +95,13 @@ foldMapUnion proxy go = cfoldMap_NS proxy (go . unI)
 matchUnion :: forall (a :: *) (as :: [*]). (IsMember a as) => Union as -> Maybe a
 matchUnion = fmap unI . eject
 
+-- Quasi-inverse of 'matchUnion'
+injectUnion :: forall (a :: *) (as :: [*]). IsMember a as => a -> Union as
+injectUnion x = inject (I x)
+
 -- * Stuff stolen from 'Data.WorldPeace" but for generics-sop
 
-relaxUnion :: Contains as bs => Union as -> Union bs
+relaxUnion :: SubsetOf as bs => Union as -> Union bs
 relaxUnion (Z x) = inject x
 relaxUnion (S r) = relaxUnion r
 
@@ -154,7 +159,7 @@ _testNubbed :: ( ( Nubbed '[Bool, Int, Int] ~ 'False
 _testNubbed = id
 
 -- | Check whether @as@ is a subset of @bs@.
-type family Contains (as :: [k]) (bs :: [k]) :: Constraint where
-  Contains (a ': as') bs =
-    (IsMember a bs, Contains as' bs)
-  Contains '[] _ = ()
+type family SubsetOf (as :: [k]) (bs :: [k]) :: Constraint where
+  SubsetOf (a ': as') bs =
+    (IsMember a bs, SubsetOf as' bs)
+  SubsetOf '[] _ = ()
