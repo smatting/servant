@@ -53,6 +53,7 @@ module Servant.API.UVerb.Union
 , Unique
 , Union
 , Contains
+, UElem
 , inject
 , eject
 , foldMapUnion

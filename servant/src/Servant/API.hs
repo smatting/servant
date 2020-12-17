@@ -126,7 +126,7 @@ import           Servant.API.Stream
 import           Servant.API.Sub
                  ((:>))
 import           Servant.API.UVerb
-                 (HasStatus, IsMember, StatusOf, Statuses, UVerb, Union,
+                 (HasStatus, IsMember, StatusOf, Statuses, UVerb, Union, UElem,
                  Unique, Contains, WithStatus (..), inject, relaxUnion, statusOf)
 import           Servant.API.Vault
                  (Vault)
