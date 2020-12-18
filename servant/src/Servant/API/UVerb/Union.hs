@@ -54,6 +54,7 @@ module Servant.API.UVerb.Union
 , Union
 , SubsetOf
 , UElem
+, All
 , inject
 , injectUnion
 , eject
